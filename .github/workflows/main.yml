@@ -1,26 +1,31 @@
-name: CI
-on: push
+on: push 
 jobs:
   deploy:
+    # 我們設定 ubuntu 為 runner。
     runs-on: ubuntu-20.04
     steps:
       - name: Git checkout
         uses: actions/checkout@v2
-
+      # 安裝 hugo，這裡使用最常被用的 peaceiris/actions-hugo@v2
       - name: Setup hugo
         uses: peaceiris/actions-hugo@v2
         with:
           hugo-version: "0.92.2"
-
+      # 這邊是建置時使用的指令，我喜歡用 --minify
       - name: Build
         run: hugo --minify
-
+      # 這邊是部署的部分
+        # token 後續會提到，不用動。
+        # 要動的只有 external_repository, user_name, user_email
+        # 如果你有改網頁產出的目錄，請更動publish_dir
+        # 如果你需要更改 target branch，請更改 publish_branch
+        # 如果 workflow 不能用的話，可以檢查一下各行的 tag 跟 space。
       - name: Deploy
         uses: peaceiris/actions-gh-pages@v3
         with:
           personal_token: ${{ secrets.TOKEN }}
-          external_repository: EKOISMYLOVE/ekoismylove.github.io
+          external_repository: WeiWeiHugo/WeiWeiHugo.github.io
           publish_dir: ./public
-          user_name: EKOISMYLOVE
-          user_email: wiwi571246@gmail.com
+          user_name: WeiWeiHugo
+          user_email: WeiWeiHugo@gmail.com
           publish_branch: master
