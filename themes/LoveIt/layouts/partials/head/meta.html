@@ -1,0 +1,29 @@
+{{- $params := .Scratch.Get "params" -}}
+
+<meta name="Description" content="{{ with .Description }}{{ . }}{{ else }}{{ if .IsPage }}{{ .Summary }}{{ else }}{{ with .Site.Params.description }}{{ . }}{{ end }}{{ end }}{{ end }}">
+
+{{- $keywords := .Keywords -}}
+{{- if not $keywords -}}
+{{- if .IsPage | and .Params.tags -}}
+{{- $keywords = .Params.tags -}}
+{{- else -}}
+{{- $keywords = .Site.Params.keywords -}}
+{{- end -}}
+{{- end -}}
+{{- with $keywords -}}
+<meta name="keywords" content='{{ delimit . ", " }}' />
+{{- end -}}
+
+{{- template "_internal/opengraph.html" . -}}
+{{- template "_internal/twitter_cards.html" . -}}
+
+<meta name="application-name" content="{{ .Site.Params.app.title | default .Site.Title }}">
+<meta name="apple-mobile-web-app-title" content="{{ .Site.Params.app.title | default .Site.Title }}">
+
+{{- with .Site.Params.app.themeColor -}}
+    <meta name="theme-color" content="{{ . }}">
+{{- end -}}
+
+{{- with .Site.Params.app.tileColor -}}
+    <meta name="msapplication-TileColor" content="{{ . }}">
+{{- end -}}
